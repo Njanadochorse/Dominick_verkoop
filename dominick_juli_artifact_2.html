@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dominick Juli 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;font-size:13px;padding:1rem;background:#fff;color:#1a1a1a}
+h1{font-size:15px;font-weight:500;margin-bottom:1rem;color:#333}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:.75rem}
+.metric{background:#f5f5f3;border-radius:8px;padding:.75rem}
+.ml{font-size:10px;color:#666;margin-bottom:3px}
+.mv{font-size:18px;font-weight:500}
+.mv.danger{color:#c0392b}.mv.success{color:#27ae60}
+.metrics2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:.75rem}
+.pb-bg{height:9px;background:#e8e8e6;border-radius:5px;overflow:hidden;margin-bottom:.25rem}
+.pb-inner{height:100%;display:flex}
+.pb-g{background:#27ae60;transition:width .3s}
+.pb-b{background:#2a78d6;transition:width .3s}
+.pb-label{display:flex;justify-content:space-between;font-size:10px;color:#888;margin-bottom:.75rem}
+.alert{background:#fff8e1;border:1px solid #ffe082;border-radius:6px;padding:8px 12px;font-size:11px;color:#7a5c00;margin-bottom:.75rem}
+.tabs{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden;width:fit-content;margin-bottom:1rem}
+.tab{padding:6px 14px;font-size:12px;cursor:pointer;background:transparent;border:none;color:#888}
+.tab.active{background:#f5f5f3;color:#1a1a1a;font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:.5rem}
+.day-cell{background:#f5f5f3;border-radius:5px;padding:5px 3px;text-align:center;border:1px solid #e0e0de}
+.day-cell.has-data{border-color:#27ae60;background:#f0fff4}
+.day-cell.today{border-color:#2a78d6;background:#f0f5ff}
+.day-cell.future{opacity:.4}
+.dl{font-size:9px;color:#888;margin-bottom:2px}
+.di{width:100%;border:none;background:transparent;text-align:center;font-size:11px;font-weight:500;color:#1a1a1a;outline:none;padding:1px 0}
+.di::placeholder{color:#ccc}
+.adot{display:inline-block;width:4px;height:4px;border-radius:50%;background:#e67e22;vertical-align:middle;margin-left:1px}
+.info{background:#f5f5f3;border-radius:6px;padding:8px 12px;font-size:11px;color:#666;margin-bottom:.75rem;border:1px solid #e0e0de}
+.avg-row{font-size:11px;color:#666;margin-bottom:.75rem;display:flex;gap:12px;flex-wrap:wrap}
+.avg-row strong{color:#1a1a1a}
+.sec{margin-bottom:1rem}
+.sec-title{font-size:10px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #e0e0de}
+.pr{display:grid;grid-template-columns:1fr 58px 70px 96px 68px 72px;gap:5px;align-items:center;padding:5px 0;border-bottom:1px solid #e0e0de}
+.pr:last-child{border-bottom:none}
+.hr{display:grid;grid-template-columns:1fr 58px 70px 96px 68px 72px;gap:5px;padding:0 0 3px}
+.hr span{font-size:9px;color:#aaa}
+.pn{font-size:11px;color:#1a1a1a}
+.pp{font-size:10px;color:#888;text-align:right}
+.sold{font-size:11px;color:#27ae60;text-align:center;font-weight:500}
+.qc{display:flex;align-items:center;gap:3px;justify-content:center}
+.qb{width:20px;height:20px;border:1px solid #ccc;border-radius:5px;background:transparent;color:#1a1a1a;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.qb:hover{background:#f0f0ee}
+.qv{font-size:12px;font-weight:500;min-width:22px;text-align:center}
+.ro{font-size:11px;font-weight:500;text-align:right}
+.tot{font-size:11px;text-align:right;color:#555}
+.new-b{display:inline-block;font-size:8px;padding:1px 4px;border-radius:3px;background:#e8f4fd;color:#2a78d6;margin-left:2px;vertical-align:middle}
+.note{font-size:9px;color:#999;margin-top:1px}
+</style></head>
+<body>
+<h1>Dominick Omzetcalculator — Juli 2026</h1>
+
+<div class="metrics">
+  <div class="metric"><div class="ml">Omzetdoel juli</div><div class="mv">€39.385</div></div>
+  <div class="metric"><div class="ml">Gerealiseerd (t/m 27 jul)</div><div class="mv" id="mg">-</div></div>
+  <div class="metric"><div class="ml">Prognose rest (28-31 jul)</div><div class="mv" id="mp">-</div></div>
+  <div class="metric"><div class="ml">Verwacht totaal</div><div class="mv" id="mt">-</div></div>
+</div>
+<div class="metrics2">
+  <div class="metric"><div class="ml">Nog te halen</div><div class="mv" id="mr">-</div></div>
+  <div class="metric"><div class="ml">Benodigd daggemiddelde (28-31 jul)</div><div class="mv" id="md">-</div></div>
+</div>
+
+<div class="pb-bg"><div class="pb-inner">
+  <div class="pb-g" id="pbg" style="width:0%"></div>
+  <div class="pb-b" id="pbb" style="width:0%"></div>
+</div></div>
+<div class="pb-label">
+  <span><span style="display:inline-block;width:7px;height:7px;border-radius:2px;background:#27ae60;margin-right:3px"></span>Gerealiseerd</span>
+  <span id="pct">0%</span>
+  <span><span style="display:inline-block;width:7px;height:7px;border-radius:2px;background:#2a78d6;margin-right:3px"></span>Prognose</span>
+</div>
+
+<div class="alert">&#9888; Nog <strong id="dagen-over">-</strong> dagen te gaan &nbsp;|&nbsp; Benodigd: <strong id="alert-dag">-</strong> &nbsp;|&nbsp; Daggemiddelde 7-26 jul: <strong id="alert-gem">-</strong></div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('dag')">Dagomzet</button>
+  <button class="tab" onclick="showTab('pro')">Prognose aanpassen</button>
+</div>
+
+<div id="panel-dag" class="panel active">
+  <div class="info">Dagen 1-27 ingevuld vanuit exportdata. Vul vanaf dag 28 dagelijks de werkelijke omzet in. <span class="adot"></span> = actieperiode (20% korting, 1-6 jul).</div>
+  <div class="day-grid" id="dgrid"></div>
+  <div class="avg-row">
+    <span>Daggemiddelde 1-6 jul (actie): <strong id="gem-actie">-</strong></span>
+    <span>Daggemiddelde 7-26 jul: <strong id="gem-normaal">-</strong></span>
+    <span>Daggemiddelde 28-31 jul: <strong id="gem-nieuw">-</strong></span>
+  </div>
+</div>
+
+<div id="panel-pro" class="panel">
+  <div class="info">Al verkocht = werkelijke stuks t/m 26 jul (alle shops). Nog te verkopen = prognose 27-31 jul, aanpasbaar met + en -.</div>
+  <div class="sec">
+    <div class="sec-title">Vliegenmaskers &amp; halsters</div>
+    <div class="hr"><span>Product</span><span style="text-align:right">Prijs</span><span style="text-align:center">Al verk.</span><span style="text-align:center">Nog te verk.</span><span style="text-align:right">Omzet prog.</span><span style="text-align:right">Totaal</span></div>
+    <div id="rm"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">Dekens</div>
+    <div class="hr"><span>Product</span><span style="text-align:right">Prijs</span><span style="text-align:center">Al verk.</span><span style="text-align:center">Nog te verk.</span><span style="text-align:right">Omzet prog.</span><span style="text-align:right">Totaal</span></div>
+    <div id="rd"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">Slowfeeders &amp; overig</div>
+    <div class="hr"><span>Product</span><span style="text-align:right">Prijs</span><span style="text-align:center">Al verk.</span><span style="text-align:center">Nog te verk.</span><span style="text-align:right">Omzet prog.</span><span style="text-align:right">Totaal</span></div>
+    <div id="ro"></div>
+  </div>
+</div>
+
+<script>
+var DOEL = 39385;
+var VANDAAG = 28;
+var ACTIE_TOT = 6;
+
+var dagData = {
+  1:757.55, 2:806.57, 3:1304.47, 4:740.67, 5:752.79,
+  6:487.48, 7:1149.91, 8:626.43, 9:690.80, 10:753.61,
+  11:976.75, 12:310.26, 13:902.25, 14:1460.58,
+  15:1721.66, 16:1902.37, 17:4614.15, 18:3252.29,
+  19:2154.51, 20:2175.08, 21:2335.84, 22:1317.54,
+  23:1739.44, 24:1587.79, 25:1582.08, 26:1793.87
+};
+
+var products = [
+  {id:'uv_defender',    name:'UV-Defender masker (NL+DE+FR)', prijs:60.38, verkocht:181, jul:35, cat:'m', isNew:true, note:'181 stuks t/m 26 jul'},
+  {id:'halster_vm',     name:'Halster + Vliegenmasker',       prijs:38.40, verkocht:131, jul:15, cat:'m'},
+  {id:'comfortfit_neus',name:'Comfort Fit + Neusflap (alle)', prijs:35.07, verkocht:99,  jul:10, cat:'m'},
+  {id:'classic',        name:'Vliegenmasker Classic',         prijs:26.92, verkocht:44,  jul:8,  cat:'m'},
+  {id:'comfortfit',     name:'Comfort Fit masker (NL+DE)',    prijs:30.43, verkocht:41,  jul:5,  cat:'m'},
+  {id:'comfort_vision', name:'Comfort Vision masker',         prijs:32.96, verkocht:6,   jul:2,  cat:'m'},
+  {id:'defender_pro',   name:'Vliegendeken Defender Pro',     prijs:103.58,verkocht:32,  jul:5,  cat:'d', isNew:true, note:'Live vanaf 16 jul'},
+  {id:'defender_lite',  name:'Vliegendeken Defender Lite',    prijs:90.20, verkocht:36,  jul:5,  cat:'d', isNew:true, note:'Live vanaf 16 jul'},
+  {id:'summer_vibes',   name:'Summer Vibes vliegendeken',     prijs:115.95,verkocht:9,   jul:1,  cat:'d'},
+  {id:'eczeemdeken',    name:'Eczeemdeken Elastic',           prijs:113.66,verkocht:4,   jul:1,  cat:'d'},
+  {id:'net_cooler',     name:'Net Cooler',                    prijs:60.57, verkocht:19,  jul:3,  cat:'d'},
+  {id:'hay_buddy',      name:'Hay Buddy Paddock',             prijs:77.24, verkocht:42,  jul:5,  cat:'o'},
+  {id:'zadeldekjes',    name:'Zadeldekjes (alle)',            prijs:39.92, verkocht:32,  jul:3,  cat:'o'},
+  {id:'stalpoort',      name:'Stalpoort',                     prijs:53.21, verkocht:8,   jul:1,  cat:'o'},
+  {id:'halsters_acc',   name:'Halsters en accessoires',       prijs:9.37,  verkocht:27,  jul:5,  cat:'o'},
+  {id:'diversen',       name:'Diversen',                      prijs:64.61, verkocht:21,  jul:3,  cat:'o'}
+];
+
+var state = {};
+products.forEach(function(p){ state[p.id] = p.jul; });
+
+function fmt(n){ return '€' + Math.round(n).toLocaleString('nl-NL'); }
+
+function showTab(n){
+  document.querySelectorAll('.tab').forEach(function(t,i){ t.classList.toggle('active', ['dag','pro'][i] === n); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('panel-' + n).classList.add('active');
+}
+
+function buildGrid(){
+  var g = document.getElementById('dgrid');
+  g.innerHTML = '';
+  for(var d = 1; d <= 31; d++){
+    var isPast = d < VANDAAG;
+    var isToday = d === VANDAAG;
+    var isFuture = d > VANDAAG;
+    var isActie = d <= ACTIE_TOT;
+    var has = !!(dagData[d] && dagData[d] > 0);
+
+    var c = document.createElement('div');
+    c.className = 'day-cell' + (has && isPast ? ' has-data' : '') + (isToday ? ' today' : '') + (isFuture ? ' future' : '');
+
+    var l = document.createElement('div');
+    l.className = 'dl';
+    l.innerHTML = d + (isActie ? '<span class="adot"></span>' : '');
+
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'di';
+    inp.dataset.day = d;
+
+    if(isFuture){
+      inp.placeholder = '';
+      inp.disabled = true;
+    } else {
+      inp.placeholder = '-';
+      if(dagData[d]) inp.value = Math.round(dagData[d]);
+      (function(cell, input, day){
+        input.addEventListener('change', function(){
+          var v = parseFloat(input.value.replace(',', '.')) || 0;
+          dagData[day] = v;
+          cell.classList.toggle('has-data', v > 0);
+          updateTotals();
+        });
+      })(c, inp, d);
+    }
+
+    c.appendChild(l);
+    c.appendChild(inp);
+    g.appendChild(c);
+  }
+}
+
+function buildRows(cat, cid){
+  var c = document.getElementById(cid);
+  c.innerHTML = '';
+  products.filter(function(p){ return p.cat === cat; }).forEach(function(p){
+    var r = document.createElement('div');
+    r.className = 'pr';
+    var b1 = p.isNew ? '<span class="new-b">nieuw</span>' : '';
+    var stuks = state[p.id];
+    var progOmzet = stuks * p.prijs;
+    var totOmzet = (p.verkocht * p.prijs) + progOmzet;
+    r.innerHTML =
+      '<div><span class="pn">' + p.name + b1 + '</span>' + (p.note ? '<div class="note">' + p.note + '</div>' : '') + '</div>' +
+      '<div class="pp">' + p.prijs.toFixed(2).replace('.', ',') + '</div>' +
+      '<div class="sold">' + p.verkocht + ' st</div>' +
+      '<div class="qc">' +
+        '<button class="qb" onclick="ch(\'' + p.id + '\',-1)">&#8722;</button>' +
+        '<span class="qv" id="q-' + p.id + '">' + stuks + '</span>' +
+        '<button class="qb" onclick="ch(\'' + p.id + '\',1)">+</button>' +
+        '<span style="font-size:9px;color:#888;margin-left:1px">st</span>' +
+      '</div>' +
+      '<div class="ro" id="o-' + p.id + '">' + fmt(progOmzet) + '</div>' +
+      '<div class="tot" id="t-' + p.id + '">' + fmt(totOmzet) + '</div>';
+    c.appendChild(r);
+  });
+}
+
+function ch(id, delta){
+  var p = products.find(function(x){ return x.id === id; });
+  var nv = Math.max(0, state[id] + delta);
+  if(p.max && nv > p.max) return;
+  state[id] = nv;
+  document.getElementById('q-' + id).textContent = nv;
+  document.getElementById('o-' + id).textContent = fmt(nv * p.prijs);
+  document.getElementById('t-' + id).textContent = fmt((p.verkocht + nv) * p.prijs);
+  updateTotals();
+}
+
+function updateTotals(){
+  // Gerealiseerd = som van alle ingevulde dagen vóór vandaag
+  var ger = 0;
+  for(var d = 1; d < VANDAAG; d++){ ger += dagData[d] || 0; }
+
+  // Extra ingevuld voor vandaag en later
+  var gerExtra = 0, extraDagen = 0;
+  for(var d = VANDAAG; d <= 31; d++){
+    if(dagData[d]){ gerExtra += dagData[d]; extraDagen++; }
+  }
+  ger += gerExtra;
+
+  // Prognose
+  var prog = 0;
+  products.forEach(function(p){ prog += state[p.id] * p.prijs; });
+
+  var tot = ger + prog;
+  var nogTeHalen = Math.max(0, DOEL - ger);
+  var restDagen = (31 - VANDAAG + 1) - extraDagen;
+  var dagDoel = restDagen > 0 ? nogTeHalen / restDagen : 0;
+
+  document.getElementById('mg').textContent = fmt(ger);
+  document.getElementById('mp').textContent = fmt(prog);
+  var te = document.getElementById('mt');
+  te.textContent = fmt(tot);
+  te.className = 'mv ' + (tot >= DOEL ? 'success' : 'danger');
+  document.getElementById('mr').textContent = fmt(nogTeHalen);
+  document.getElementById('md').textContent = fmt(dagDoel) + '/dag';
+
+  var pg = Math.min(100, ger / DOEL * 100);
+  var pp = Math.min(100 - pg, prog / DOEL * 100);
+  document.getElementById('pbg').style.width = pg + '%';
+  document.getElementById('pbb').style.width = pp + '%';
+  document.getElementById('pct').textContent = Math.round((ger + prog) / DOEL * 100) + '%';
+
+  // Alert
+  document.getElementById('dagen-over').textContent = restDagen;
+  document.getElementById('alert-dag').textContent = fmt(dagDoel) + '/dag';
+
+  // Gemiddelden
+  var aO = 0, aD = 0;
+  for(var d = 1; d <= ACTIE_TOT; d++){ if(dagData[d]){ aO += dagData[d]; aD++; } }
+  document.getElementById('gem-actie').textContent = aD > 0 ? fmt(aO / aD) + '/dag' : '-';
+
+  var nO = 0, nD = 0;
+  for(var d = ACTIE_TOT + 1; d < VANDAAG; d++){ if(dagData[d]){ nO += dagData[d]; nD++; } }
+  document.getElementById('gem-normaal').textContent = nD > 0 ? fmt(nO / nD) + '/dag' : '-';
+  document.getElementById('alert-gem').textContent = nD > 0 ? fmt(nO / nD) + '/dag' : '-';
+
+  var nwO = 0, nwD = 0;
+  for(var d = VANDAAG; d <= 31; d++){ if(dagData[d] > 0){ nwO += dagData[d]; nwD++; } }
+  document.getElementById('gem-nieuw').textContent = nwD > 0 ? fmt(nwO / nwD) + '/dag' : '-';
+}
+
+buildGrid();
+buildRows('m', 'rm');
+buildRows('d', 'rd');
+buildRows('o', 'ro');
+updateTotals();
+</script>
+</body></html>
