@@ -1,2 +1,2 @@
-# Dominick_verkoop
+# Dominick_verkoop_juli
 Dominick Omzetcalculator — Juli 2026
